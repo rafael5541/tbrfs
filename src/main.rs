@@ -113,10 +113,11 @@ fn run<W: Write>(writer: &mut W, program: &Program, tape_size: Option<usize>) {
                 write!(writer, "{}", vm.tape[vm.pointer] as char).unwrap()
             }
             Char::InChr => {
-                if let Some(c) = getchar() {
-                    vm.tape[vm.pointer] = c;
-                    vm.pc += 1
+                match getchar() {
+                    Some(c) => vm.tape[vm.pointer] = c,
+                    None => vm.tape[vm.pointer] = 0,
                 }
+                vm.pc += 1
             }
             Char::JmpP => {
                 if vm.tape[vm.pointer] != 0 {
